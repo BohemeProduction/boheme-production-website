@@ -40,8 +40,18 @@ const Header = () => {
     }`}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-24">
-          {/* Logo */}
-          <div className="flex items-center">
+          {/* Mobile Menu Button - Left */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className={`md:hidden p-2 ${
+              isScrolled ? 'text-[#13182c]' : 'text-white'
+            } hover:text-[#efd0e0] transition-all duration-300 hover:scale-110 hover:rotate-90`}
+          >
+            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+
+          {/* Logo - Centered */}
+          <div className="flex items-center justify-center flex-1 md:flex-none">
             <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="cursor-pointer">
               <div className="relative w-[180px] flex items-center">
                 <img 
@@ -114,15 +124,7 @@ const Header = () => {
             </div>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className={`md:hidden p-2 ${
-              isScrolled ? 'text-[#13182c]' : 'text-white'
-            } hover:text-[#efd0e0] transition-all duration-300 hover:scale-110 hover:rotate-90`}
-          >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
+
         </div>
 
         {/* Mobile Navigation */}
