@@ -40,27 +40,17 @@ const Header = () => {
     }`}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-24">
-          {/* Mobile Menu Button - Left */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className={`md:hidden p-2 ${
-              isScrolled ? 'text-[#13182c]' : 'text-white'
-            } hover:text-[#efd0e0] transition-all duration-300 hover:scale-110 hover:rotate-90`}
-          >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
-
           {/* Logo - Centered */}
-          <div className="flex items-center justify-center flex-1 md:flex-none">
+          <div className="flex items-center justify-center flex-1">
             <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="cursor-pointer">
-              <div className="relative w-[180px] flex items-center">
+              <div className="relative w-[180px] flex items-center" style={{ transform: 'translateY(-2px)' }}>
                 <img 
                   src="https://lh3.googleusercontent.com/pw/AP1GczNzU7PB1wD4ZwB3-nmN1Fuylb6zr6Nz7Yb2dAUEeUIIq03DUL8FzRcovj3ru3zStRgI0RusPDzCvOSo87XRzeVs0RfyKnr95McNARLsKTXU6DtlFUfksX7R0SmjlYcWmOJ2OZkpZpJ3juCAD_Ez_vP5=w2258-h1596-s-no-gm?authuser=0"
                   alt="Bohème Production"
                   className={`absolute inset-0 w-[180px] object-contain transition-opacity duration-500 ease-in-out ${
                     isScrolled ? 'opacity-0' : 'opacity-100'
                   }`}
-                  style={{ marginTop: '0' }}
+                  style={{ marginTop: '-16px' }}
                 />
                 <img 
                   src="https://lh3.googleusercontent.com/pw/AP1GczMvEqB335uoGMvcLypz1mphBVMW0zX-6KT7kxM3WiRvElga6v-_-DqN0cgfmZl_ug22_pHNX2lohSsGfzzP0zl8GN02aF2sqL5pf55s4-7pkl3IfuvBSAl65-a9wH5S66zoJ4YJlTOkKjFkDUbx--jN=w582-h429-s-no-gm?authuser=0"
@@ -124,7 +114,15 @@ const Header = () => {
             </div>
           </div>
 
-
+          {/* Mobile Menu Button - Right */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className={`md:hidden p-2 ${
+              isScrolled ? 'text-[#13182c]' : 'text-white'
+            } hover:text-[#efd0e0] transition-all duration-300 hover:scale-110 hover:rotate-90`}
+          >
+            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
         </div>
 
         {/* Mobile Navigation */}
