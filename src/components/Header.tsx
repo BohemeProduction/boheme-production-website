@@ -17,13 +17,24 @@ const FacebookIcon = () => (
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 768);
+    };
+    
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Initial check
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   const navItems = [
@@ -49,8 +60,11 @@ const Header = () => {
                   alt="Bohème Production"
                   className={`absolute inset-0 w-[180px] object-contain transition-opacity duration-500 ease-in-out ${
                     isScrolled ? 'opacity-0' : 'opacity-100'
-                  }`}
-                  style={{ marginTop: '-16px' }}
+                  } md:-translate-x-[200px]`}
+                  style={{ 
+                    marginTop: '-16px', 
+                    marginLeft: '16px'
+                  }}
                 />
                 <img 
                   src="https://lh3.googleusercontent.com/pw/AP1GczMvEqB335uoGMvcLypz1mphBVMW0zX-6KT7kxM3WiRvElga6v-_-DqN0cgfmZl_ug22_pHNX2lohSsGfzzP0zl8GN02aF2sqL5pf55s4-7pkl3IfuvBSAl65-a9wH5S66zoJ4YJlTOkKjFkDUbx--jN=w582-h429-s-no-gm?authuser=0"
@@ -58,6 +72,11 @@ const Header = () => {
                   className={`w-[120px] object-contain transition-opacity duration-500 ease-in-out ${
                     isScrolled ? 'opacity-100' : 'opacity-0'
                   }`}
+                  style={{ 
+                    transform: isScrolled 
+                      ? (isDesktop ? 'translateY(-2px) translateX(-157px)' : 'translateY(-2px) translateX(43px)')
+                      : (isDesktop ? 'translateY(-2px) translateX(-200px)' : 'translateY(-2px) translateX(43px)')
+                  }}
                 />
               </div>
             </a>
