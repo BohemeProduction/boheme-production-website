@@ -1,7 +1,8 @@
+import { NextApiRequest, NextApiResponse } from 'next';
 import { Resend } from 'resend';
 
 // Types pour le formulaire de contact
-export interface ContactFormData {
+interface ContactFormData {
   firstName: string;
   lastName: string;
   email: string;
@@ -13,11 +14,26 @@ export interface ContactFormData {
 }
 
 // Configuration Resend
-const resend = new Resend(import.meta.env.VITE_RESEND_API_KEY);
+const resend = new Resend(process.env.VITE_RESEND_API_KEY);
 
-// Fonction pour envoyer l'email de contact
-export const sendContactEmail = async (formData: ContactFormData): Promise<void> => {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  // Vérifier que c'est une requête POST
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
   try {
+    const formData: ContactFormData = req.body;
+
+    // Validation des données
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone) {
+      return res.status(400).json({ error: 'Données manquantes' });
+    }
+
+    // Envoi de l'email via Resend
     const { data, error } = await resend.emails.send({
       from: 'Boheme Production <contact@bohemeprod.com>',
       to: ['boheme.productionwedding@gmail.com'],
@@ -63,12 +79,14 @@ export const sendContactEmail = async (formData: ContactFormData): Promise<void>
 
     if (error) {
       console.error('Erreur Resend:', error);
-      throw new Error('Erreur lors de l\'envoi de l\'email');
+      return res.status(500).json({ error: 'Erreur lors de l\'envoi de l\'email' });
     }
 
     console.log('Email envoyé avec succès:', data);
+    return res.status(200).json({ success: true, message: 'Email envoyé avec succès' });
+
   } catch (error) {
-    console.error('Erreur lors de l\'envoi de l\'email:', error);
-    throw new Error('Erreur lors de l\'envoi de l\'email');
+    console.error('Erreur serveur:', error);
+    return res.status(500).json({ error: 'Erreur serveur interne' });
   }
-}; 
+}

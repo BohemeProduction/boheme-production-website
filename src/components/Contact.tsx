@@ -1,6 +1,17 @@
 import React, { useState } from 'react';
 import { Phone, Mail, MapPin, Calendar, Users, Heart, Send, CheckCircle, AlertCircle } from 'lucide-react';
-import { sendContactEmail, ContactFormData } from '@/lib/resend';
+
+// Types pour le formulaire de contact
+interface ContactFormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  projectDate: string;
+  venue: string;
+  services: string[];
+  message: string;
+}
 
 const Contact = () => {
   const [formData, setFormData] = useState<ContactFormData>({
@@ -41,21 +52,39 @@ const Contact = () => {
     setSubmitMessage('');
 
     try {
-      await sendContactEmail(formData);
-      setSubmitStatus('success');
-      setSubmitMessage('Votre message a été envoyé avec succès ! Nous vous répondrons dans les plus brefs délais.');
-      
-      // Reset form
-      setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
-        projectDate: '',
-        venue: '',
-        services: [],
-        message: ''
+      // Appel de l'API route Vercel au lieu de Resend directement
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       });
+
+      if (!response.ok) {
+        throw new Error('Erreur lors de l\'envoi de l\'email');
+      }
+
+      const result = await response.json();
+      
+      if (result.success) {
+        setSubmitStatus('success');
+        setSubmitMessage('Votre message a été envoyé avec succès ! Nous vous répondrons dans les plus brefs délais.');
+        
+        // Reset form
+        setFormData({
+          firstName: '',
+          lastName: '',
+          email: '',
+          phone: '',
+          projectDate: '',
+          venue: '',
+          services: [],
+          message: ''
+        });
+      } else {
+        throw new Error(result.error || 'Erreur lors de l\'envoi de l\'email');
+      }
     } catch (error) {
       setSubmitStatus('error');
       setSubmitMessage('Une erreur est survenue lors de l\'envoi de votre message. Veuillez réessayer ou nous contacter directement.');
